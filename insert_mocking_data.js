@@ -9,6 +9,15 @@ const crypto = require("crypto"); // for randomUUID
 const moment = require("moment");
 
 const exampleHighlight = require("./example_highlight");
+// get rid of the text attribute in blocks
+exampleHighlight.blocks.forEach((block) => {
+  for (const key in block) {
+    block[key].forEach((item) => {
+      delete item.text;
+    });
+  }
+});
+
 const exampleMatrixEvent = require("./example_matrix_events");
 
 // some config
@@ -311,11 +320,6 @@ async function mockChecklists(
   numBlocks
 ) {
   console.log(`mocking ${numDocuments} checklists`);
-  // get rid of the text attribute in blocks
-  for (let i = 0; i < exampleHighlight.blocks.length; i++) {
-    delete exampleHighlight.blocks[i].text;
-  }
-
   const generateOneChecklist = () => {
     // generate a rule list of numRules rules
     const ruleIDs = [];
@@ -368,23 +372,33 @@ async function mockChecklists(
   }
 }
 
-function mockMatrixEvents(numDocuments, numMatrices, numEvents) {
+async function mockMatrixEvents(numDocuments) {
   console.log(`mocking ${numDocuments} matrix events`);
   const generateOneMatrixEvent = () => {
     const matrixEvent = {};
     matrixEvent.document_id = crypto.randomUUID();
     matrixEvent.matrices = exampleMatrixEvent.matrices;
     for (const key in matrixEvent.matrices) {
-        for (const key2 in matrixEvent.matrices[key]) {
-            matrixEvent.matrices[key][key2].highlights = [];
-            for (let i = 0; i < 10; i++) {
-                matrixEvent.matrices[key][key2].highlights.push(exampleHighlight);
-            }
+      for (const key2 in matrixEvent.matrices[key]) {
+        matrixEvent.matrices[key][key2].highlights = [];
+        for (let i = 0; i < 3; i++) {
+          matrixEvent.matrices[key][key2].highlights.push(exampleHighlight);
         }
+      }
     }
 
     return matrixEvent;
   };
+
+  const db = await DB.getDBConnection();
+  const batchSize = 10;
+  for (let i = 0; i < numDocuments; i += batchSize) {
+    const matrixEvents = [];
+    for (let j = 0; j < batchSize; j++) {
+      matrixEvents.push(generateOneMatrixEvent());
+    }
+    await DB.insertDocuments(db, "matrix_events", matrixEvents);
+  }
 }
 
 function mockEventValues(totalSize) {}
@@ -407,6 +421,7 @@ async function main() {
   // await mockDocuments(numDocuments);
   // await mockResponsibleTeam(3000);
   // await mockChecklists(numDocuments, 45, 3);
+  await mockMatrixEvents(numDocuments);
 }
 
 main().catch(console.error);
