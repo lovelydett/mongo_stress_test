@@ -8,7 +8,7 @@ const crypto = require("crypto"); // for randomUUID
 const moment = require("moment"); // for random date
 
 // import some (partial) example data objects
-const exampleHighlight = require("./example_highlight");
+const exampleHighlight = require("./example_objects/example_highlight");
 // get rid of the text attribute in blocks
 exampleHighlight.blocks.forEach((block) => {
   for (const key in block) {
@@ -17,8 +17,8 @@ exampleHighlight.blocks.forEach((block) => {
     });
   }
 });
-const exampleMatrixEvent = require("./example_matrix_events");
-const exampleEventValue = require("./example_event_value");
+const exampleMatrixEvent = require("./example_objects/example_matrix_events");
+const exampleEventValue = require("./example_objects/example_event_value");
 
 /***** Begins the logic of this file *****/
 

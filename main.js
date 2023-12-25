@@ -6,7 +6,7 @@
 
 "use strict";
 
-const { initer, inserter } = require("./insert_mocking_data");
+const { initer, inserter } = require("./insert_data");
 const metricsCollector = require("./metrics_collect");
 
 const cmdParser = require("command-line-parser");
