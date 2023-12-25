@@ -5,6 +5,7 @@
 "use strict";
 
 const crypto = require("crypto"); // for randomUUID
+const moment = require("moment"); // for random date
 
 // import some (partial) example data objects
 const exampleHighlight = require("./example_highlight");
@@ -199,9 +200,8 @@ dataMocker.generateOneDocument = () => {
 
 dataMocker.generateOneResponsibleTeam = () => {
   const responsibleTeam = {};
-  // 1. stock_code random in [10000, 13000]
-  const stockCode = 10000 + Math.floor(Math.random() * 20000);
-  responsibleTeam.stock_code = stockCode.toString();
+  // 1. stock_code random
+  responsibleTeam.stock_code = crypto.randomUUID();
   // 2. team random in ["team1", "team2", "team3", "team4", "team5"]
   const teams = ["team1", "team2", "team3", "team4", "team5"];
   const teamIndex = Math.floor(Math.random() * teams.length);
@@ -213,6 +213,7 @@ dataMocker.generateOneChecklist = () => {
   const numRules = 50;
   // generate a rule list of numRules rules
   const ruleIDs = [];
+  const numHighlights = 3;
   for (let i = 0; i < numRules; i++) {
     const ruleID = crypto.randomUUID();
     ruleIDs.push(ruleID);

@@ -15,14 +15,15 @@ const moment = require("moment");
 const DB = {};
 module.exports = DB;
 
-let client = null;
+let db = null;
 DB.getDBConnection = async () => {
-  console.log("Connecting to MongoDB");
-  if (client == null) {
-    client = await mongodb.MongoClient.connect(mongoUrl);
+  if (db != null) {
+    return db;
   }
+  const client = await mongodb.MongoClient.connect(mongoUrl);
+  console.log("Connecting to MongoDB");
   console.log("Connected to MongoDB");
-  const db = client.db(dbName);
+  db = client.db(dbName);
   return db;
 };
 

@@ -7,11 +7,18 @@
 const DB = require("./db");
 const dataMocker = require("./data_mocker");
 
-// some config
+/******* Begins the logic of this file *******/
+const initer = {};
+const inserter = {};
+module.exports = {
+  initer: initer,
+  inserter: inserter,
+};
+
 const NUMBER_DOCUMENTS = 150000000;
 
 // collection initializers
-async function initDocuments() {
+initer.initDocuments = async () => {
   console.log("initializing documents");
   // Step1: create the "documents" collection, if exists, drop it
   const db = await DB.getDBConnection();
@@ -41,9 +48,9 @@ async function initDocuments() {
     .createIndex({ "checklists.contents.checklist": 1 });
   await db.collection("documents").createIndex({ filing_title: 1 });
   console.log("documents initialized");
-}
+};
 
-async function initResponsibleTeam() {
+initer.initResponsibleTeam = async () => {
   console.log("initializing responsible team");
   // Step1: create the "teams" collection, if exists, drop it
   const db = await DB.getDBConnection();
@@ -53,9 +60,9 @@ async function initResponsibleTeam() {
   // Step2: create indices
   await db.collection("teams").createIndex({ stock_code: 1 }, { unique: true });
   console.log("responsible team initialized");
-}
+};
 
-async function initChecklists() {
+initer.initChecklists = async () => {
   console.log("initializing checklists");
   const db = await DB.getDBConnection();
   await db.collection("checklists").drop();
@@ -65,9 +72,8 @@ async function initChecklists() {
     .collection("checklists")
     .createIndex({ document_id: 1 }, { unique: true });
   console.log("checklists initialized");
-}
-
-async function initMatrixEvents() {
+};
+initer.initMatrixEvents = async () => {
   console.log("initializing matrix_events");
   const db = await DB.getDBConnection();
   await db.collection("matrix_events").drop();
@@ -77,9 +83,31 @@ async function initMatrixEvents() {
     .collection("matrix_events")
     .createIndex({ document_id: 1 }, { unique: true });
   console.log("matrix_events initialized");
-}
+};
 
-async function initTaggingTypes() {
+initer.initEventValues = async () => {
+  console.log("initializing event_values");
+  const db = await DB.getDBConnection();
+  await db.collection("event_values").drop();
+  await DB.createCollection(db, "event_values");
+
+  await db
+    .collection("event_values")
+    .createIndex({ event_id: 1 }, { unique: true });
+};
+
+initer.initEditHistory = async () => {
+  console.log("initializing edit_history");
+  const db = await DB.getDBConnection();
+  await db.collection("edit_history").drop();
+  await DB.createCollection(db, "edit_history");
+
+  await db
+    .collection("edit_history")
+    .createIndex({ document_id: 1 }, { unique: true });
+};
+
+initer.initTaggingTypes = async () => {
   console.log("initializing tagging_types");
   const db = await DB.getDBConnection();
   await db.collection("tagging_types").drop();
@@ -88,34 +116,38 @@ async function initTaggingTypes() {
   await db
     .collection("tagging_types")
     .createIndex({ document_id: 1 }, { unique: true });
-}
+};
 
 // Generate and insert a given number of documents
-async function mockDocuments(totalSize) {
-  console.log(`Inserting ${totalSize} mocked documents`);
+inserter.mockDocuments = async (numDocuments) => {
+  console.log(`inserting ${numDocuments} mocked documents`);
 
   // insert documents
   const db = await DB.getDBConnection();
-  const batchSize = 1000;
-  for (let i = 0; i < totalSize; i += batchSize) {
+  const batchSize = 10;
+  for (let i = 0; i < numDocuments; i += batchSize) {
     const documents = [];
     for (let j = 0; j < batchSize; j++) {
       documents.push(dataMocker.generateOneDocument());
     }
     await DB.insertDocuments(db, "documents", documents);
   }
-}
+};
 
-async function mockResponsibleTeam(numStock) {
+inserter.mockResponsibleTeam = async (numStock) => {
+  console.log(`inserting ${numStock} mocked responsible teams`);
   const db = await DB.getDBConnection();
-  for (let i = 0; i < numStock; i++) {
-    const responsibleTeam = dataMocker.generateOneResponsibleTeam();
-    responsibleTeam.stock_code = (i + 10000).toString();
-    await db.collection("teams").insertOne(responsibleTeam);
+  const batchSize = 10;
+  for (let i = 0; i < numStock; i += batchSize) {
+    const teams = [];
+    for (let j = 0; j < batchSize; j++) {
+      teams.push(dataMocker.generateOneResponsibleTeam());
+    }
+    await DB.insertDocuments(db, "teams", teams);
   }
-}
+};
 
-async function mockChecklists(numDocuments) {
+inserter.mockChecklists = async (numDocuments) => {
   console.log(`inserting ${numDocuments} mocked checklists`);
   const db = await DB.getDBConnection();
   const batchSize = 10;
@@ -126,9 +158,9 @@ async function mockChecklists(numDocuments) {
     }
     await DB.insertDocuments(db, "checklists", matrixEvents);
   }
-}
+};
 
-async function mockMatrixEvents(numDocuments) {
+inserter.mockMatrixEvents = async (numDocuments) => {
   console.log(`inserting ${numDocuments} mocked matrix_events`);
   const db = await DB.getDBConnection();
   const batchSize = 10;
@@ -139,62 +171,45 @@ async function mockMatrixEvents(numDocuments) {
     }
     await DB.insertDocuments(db, "matrix_events", matrixEvents);
   }
-}
+};
 
-async function mockEventValues(numDocuments) {
-  console.log("inserting ${numDocuments} mocked event_values");
+inserter.mockEventValues = async (numDocuments) => {
+  console.log(`inserting ${numDocuments} mocked event_values`);
   const db = await DB.getDBConnection();
+  const numMatrix = 45;
+  const numEvents = 2;
   const batchSize = 10;
-  for (let i = 0; i < numDocuments; i += batchSize) {
+  for (let i = 0; i < numDocuments * numMatrix * numEvents; i += batchSize) {
     const eventValues = [];
     for (let j = 0; j < batchSize; j++) {
       eventValues.push(dataMocker.generateOneEventValue());
     }
     await DB.insertDocuments(db, "event_values", eventValues);
   }
-}
+};
 
-async function mockTaggingTypes(numDocuments) {
-    console.log("inserting ${numDocuments} mocked tagging_types");
-    const db = await DB.getDBConnection();
-    const batchSize = 10;
-    for (let i = 0; i < numDocuments; i += batchSize) {
-      const taggingTypes = [];
-      for (let j = 0; j < batchSize; j++) {
-        taggingTypes.push(dataMocker.generateOneTaggingType());
-      }
-      await DB.insertDocuments(db, "tagging_types", taggingTypes);
+inserter.mockTaggingTypes = async (numDocuments) => {
+  console.log(`inserting ${numDocuments} mocked tagging_types`);
+  const db = await DB.getDBConnection();
+  const batchSize = 10;
+  for (let i = 0; i < numDocuments; i += batchSize) {
+    const taggingTypes = [];
+    for (let j = 0; j < batchSize; j++) {
+      taggingTypes.push(dataMocker.generateOneTaggingType());
     }
-}
+    await DB.insertDocuments(db, "tagging_types", taggingTypes);
+  }
+};
 
-async function mockEditHistory(numDocuments) {
-    console.log("inserting ${numDocuments} mocked edit_history");
-    const db = await DB.getDBConnection();
-    const batchSize = 10;
-    for (let i = 0; i < numDocuments; i += batchSize) {
-      const editHistory = [];
-      for (let j = 0; j < batchSize; j++) {
-        editHistory.push(dataMocker.generateOneEditHistory());
-      }
-      await DB.insertDocuments(db, "edit_history", editHistory);
+inserter.mockEditHistory = async (numDocuments) => {
+  console.log(`inserting ${numDocuments} mocked edit_history`);
+  const db = await DB.getDBConnection();
+  const batchSize = 10;
+  for (let i = 0; i < numDocuments; i += batchSize) {
+    const editHistory = [];
+    for (let j = 0; j < batchSize; j++) {
+      editHistory.push(dataMocker.generateOneEditHistory());
     }
-}
-
-async function main() {
-  const ratio = 0.0001;
-  const numDocuments = Math.trunc(NUMBER_DOCUMENTS * ratio);
-
-  // init collections
-  //   await initDocuments();
-  //   await initResponsibleTeam();
-  // await initChecklists();
-  await initMatrixEvents();
-
-  // adding data into the existing collections
-  // await mockDocuments(numDocuments);
-  // await mockResponsibleTeam(3000);
-  // await mockChecklists(numDocuments, 45, 3);
-  await mockMatrixEvents(numDocuments);
-}
-
-main().catch(console.error);
+    await DB.insertDocuments(db, "edit_history", editHistory);
+  }
+};

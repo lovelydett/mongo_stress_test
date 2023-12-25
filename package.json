@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "command-line-parser": "^0.2.10",
     "crypto": "^1.0.1",
     "moment": "^2.29.4",
     "mongodb": "^6.3.0",
