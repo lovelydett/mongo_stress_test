@@ -20,19 +20,23 @@ metricsCollector.getTotalSize = async () => {
 };
 
 metricsCollector.getIndexSize = async () => {
-  const db = await DB.getDBConnection();
-  const collectionNames = [
-    "documents",
-    "teams",
-    "matrix_events",
-    "event_values",
-    "checklists",
-    "tagging_types",
-    "edit_history",
-  ];
-  let indexSize = 0;
-  for (const name of collectionNames) {
-    indexSize += db.collection(name).totalIndexSize;
-  }
-  return indexSize;
+    const db = await DB.getDBConnection();
+    const stats = await db.stats();
+    const indexSize = stats.indexSize;
+    return indexSize;
 };
+
+const main = async () => {
+  const db = await DB.getDBConnection();
+  const stats = await db.stats();
+  console.log(stats);
+  const dataSize = stats.dataSize;
+  const indexSize = stats.indexSize;
+  console.log(dataSize, indexSize);
+};
+
+if (require.main == module) {
+    main()
+        .catch(console.error)
+        .finally(() => process.exit(0));
+}

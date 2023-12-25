@@ -34,18 +34,20 @@ async function main() {
   );
 
   await inserter.mockResponsibleTeam(3000);
-  for (let numDocuments = 100; numDocuments <= 1500; numDocuments += 100) {
-    await inserter.mockDocuments(numDocuments);
-    await inserter.mockChecklists(numDocuments);
-    await inserter.mockMatrixEvents(numDocuments);
-    await inserter.mockEventValues(numDocuments);
-    await inserter.mockEditHistory(numDocuments);
-    await inserter.mockTaggingTypes(numDocuments);
+  const deltaNumbers = 1000;
+  const totalNumbers = 15000;
+  for (let inserted = 1000; inserted <= totalNumbers; inserted += deltaNumbers) {
+    await inserter.mockDocuments(deltaNumbers);
+    await inserter.mockChecklists(deltaNumbers);
+    await inserter.mockMatrixEvents(deltaNumbers);
+    await inserter.mockEventValues(deltaNumbers);
+    await inserter.mockEditHistory(deltaNumbers);
+    await inserter.mockTaggingTypes(deltaNumbers);
     // collect metrics
     const dataSize = await metricsCollector.getTotalSize();
     const indexSize = await metricsCollector.getIndexSize();
-    fout.write(`${numDocuments}, ${dataSize}, ${indexSize}, \n`);
-    console.log(`${numDocuments}, ${dataSize}, ${indexSize}`);
+    fout.write(`${inserted + deltaNumbers}, ${dataSize}, ${indexSize}, \n`);
+    console.log(`${inserted + deltaNumbers}, ${dataSize}, ${indexSize}`);
   }
 
   console.log("Done");

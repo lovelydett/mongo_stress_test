@@ -124,7 +124,7 @@ inserter.mockDocuments = async (numDocuments) => {
 
   // insert documents
   const db = await DB.getDBConnection();
-  const batchSize = 10;
+  const batchSize = 100;
   for (let i = 0; i < numDocuments; i += batchSize) {
     const documents = [];
     for (let j = 0; j < batchSize; j++) {
@@ -137,7 +137,7 @@ inserter.mockDocuments = async (numDocuments) => {
 inserter.mockResponsibleTeam = async (numStock) => {
   console.log(`inserting ${numStock} mocked responsible teams`);
   const db = await DB.getDBConnection();
-  const batchSize = 10;
+  const batchSize = 1000;
   for (let i = 0; i < numStock; i += batchSize) {
     const teams = [];
     for (let j = 0; j < batchSize; j++) {
@@ -163,7 +163,7 @@ inserter.mockChecklists = async (numDocuments) => {
 inserter.mockMatrixEvents = async (numDocuments) => {
   console.log(`inserting ${numDocuments} mocked matrix_events`);
   const db = await DB.getDBConnection();
-  const batchSize = 10;
+  const batchSize = 100;
   for (let i = 0; i < numDocuments; i += batchSize) {
     const matrixEvents = [];
     for (let j = 0; j < batchSize; j++) {
@@ -178,7 +178,7 @@ inserter.mockEventValues = async (numDocuments) => {
   const db = await DB.getDBConnection();
   const numMatrix = 45;
   const numEvents = 2;
-  const batchSize = 10;
+  const batchSize = 1000;
   for (let i = 0; i < numDocuments * numMatrix * numEvents; i += batchSize) {
     const eventValues = [];
     for (let j = 0; j < batchSize; j++) {
@@ -191,7 +191,7 @@ inserter.mockEventValues = async (numDocuments) => {
 inserter.mockTaggingTypes = async (numDocuments) => {
   console.log(`inserting ${numDocuments} mocked tagging_types`);
   const db = await DB.getDBConnection();
-  const batchSize = 10;
+  const batchSize = 100;
   for (let i = 0; i < numDocuments; i += batchSize) {
     const taggingTypes = [];
     for (let j = 0; j < batchSize; j++) {
@@ -204,7 +204,7 @@ inserter.mockTaggingTypes = async (numDocuments) => {
 inserter.mockEditHistory = async (numDocuments) => {
   console.log(`inserting ${numDocuments} mocked edit_history`);
   const db = await DB.getDBConnection();
-  const batchSize = 10;
+  const batchSize = 1000;
   for (let i = 0; i < numDocuments; i += batchSize) {
     const editHistory = [];
     for (let j = 0; j < batchSize; j++) {
