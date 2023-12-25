@@ -34,9 +34,9 @@ async function main() {
   );
 
   await inserter.mockResponsibleTeam(3000);
-  const deltaNumbers = 1000;
+  const deltaNumbers = 100;
   const totalNumbers = 15000;
-  for (let inserted = 1000; inserted <= totalNumbers; inserted += deltaNumbers) {
+  for (let inserted = 0; inserted <= totalNumbers; inserted += deltaNumbers) {
     await inserter.mockDocuments(deltaNumbers);
     await inserter.mockChecklists(deltaNumbers);
     await inserter.mockMatrixEvents(deltaNumbers);
