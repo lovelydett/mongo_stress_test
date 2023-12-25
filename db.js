@@ -16,8 +16,8 @@ const DB = {};
 module.exports = DB;
 
 let db = null;
-DB.getDBConnection = async () => {
-  if (db != null) {
+DB.getDBConnection = async (forceNew = false) => {
+  if (!forceNew && db != null) {
     return db;
   }
   const client = await mongodb.MongoClient.connect(mongoUrl);
