@@ -13,7 +13,7 @@ matrixEvent.matrices = {
         calculation_type: "gm_price_limit_agreement_date",
         value: {
           value: "318.1234567",
-          highlights: {},
+          highlight: {},
           source_remark: {
             source: "ai",
             update_time: "2023-11-23T06:00:00Z",
@@ -22,7 +22,7 @@ matrixEvent.matrices = {
         candidates: [
           {
             value: "318.1234567",
-            highlights: {},
+            highlight: {},
             source_remark: {
               source: "ai",
               update_time: "2023-11-23T06:00:00Z",
@@ -30,7 +30,7 @@ matrixEvent.matrices = {
           },
           {
             value: "318.1234567",
-            highlights: {},
+            highlight: {},
             source_remark: {
               source: "ai",
               update_time: "2023-11-23T06:00:00Z",
@@ -38,7 +38,7 @@ matrixEvent.matrices = {
           },
           {
             value: "318.1234567",
-            highlights: {},
+            highlight: {},
             source_remark: {
               source: "ai",
               update_time: "2023-11-23T06:00:00Z",
@@ -55,7 +55,7 @@ matrixEvent.matrices = {
         calculation_type: "gm_conversion_price_agreement_date",
         value: {
           value: "2023-11-21T08:22:00Z",
-          highlights: {},
+          highlight: {},
           source_remark: {
             source: "ai",
             update_time: "2023-11-23T06:00:00Z",
@@ -64,7 +64,7 @@ matrixEvent.matrices = {
         candidates: [
           {
             value: "318.1234567",
-            highlights: {},
+            highlight: {},
             source_remark: {
               source: "ai",
               update_time: "2023-11-23T06:00:00Z",
@@ -72,7 +72,7 @@ matrixEvent.matrices = {
           },
           {
             value: "318.1234567",
-            highlights: {},
+            highlight: {},
             source_remark: {
               source: "ai",
               update_time: "2023-11-23T06:00:00Z",
@@ -80,7 +80,7 @@ matrixEvent.matrices = {
           },
           {
             value: "318.1234567",
-            highlights: {},
+            highlight: {},
             source_remark: {
               source: "ai",
               update_time: "2023-11-23T06:00:00Z",
@@ -100,7 +100,7 @@ matrixEvent.matrices = {
         calculation_type: "gm_price_limit_agreement_date",
         value: {
           value: "318.1234567",
-          highlights: {},
+          highlight: {},
           source_remark: {
             source: "ai",
             update_time: "2023-11-23T06:00:00Z",
@@ -109,7 +109,7 @@ matrixEvent.matrices = {
         candidates: [
           {
             value: "318.1234567",
-            highlights: {},
+            highlight: {},
             source_remark: {
               source: "ai",
               update_time: "2023-11-23T06:00:00Z",
@@ -117,7 +117,7 @@ matrixEvent.matrices = {
           },
           {
             value: "318.1234567",
-            highlights: {},
+            highlight: {},
             source_remark: {
               source: "ai",
               update_time: "2023-11-23T06:00:00Z",
@@ -125,7 +125,7 @@ matrixEvent.matrices = {
           },
           {
             value: "318.1234567",
-            highlights: {},
+            highlight: {},
             source_remark: {
               source: "ai",
               update_time: "2023-11-23T06:00:00Z",
@@ -142,7 +142,7 @@ matrixEvent.matrices = {
         calculation_type: "gm_conversion_price_agreement_date",
         value: {
           value: "2023-11-21T08:22:00Z",
-          highlights: {},
+          highlight: {},
           source_remark: {
             source: "ai",
             update_time: "2023-11-23T06:00:00Z",
@@ -151,7 +151,7 @@ matrixEvent.matrices = {
         candidates: [
           {
             value: "318.1234567",
-            highlights: {},
+            highlight: {},
             source_remark: {
               source: "ai",
               update_time: "2023-11-23T06:00:00Z",
@@ -159,7 +159,7 @@ matrixEvent.matrices = {
           },
           {
             value: "318.1234567",
-            highlights: {},
+            highlight: {},
             source_remark: {
               source: "ai",
               update_time: "2023-11-23T06:00:00Z",
@@ -167,7 +167,7 @@ matrixEvent.matrices = {
           },
           {
             value: "318.1234567",
-            highlights: {},
+            highlight: {},
             source_remark: {
               source: "ai",
               update_time: "2023-11-23T06:00:00Z",
@@ -187,7 +187,7 @@ matrixEvent.matrices = {
         calculation_type: "gm_price_limit_agreement_date",
         value: {
           value: "318.1234567",
-          highlights: {},
+          highlight: {},
           source_remark: {
             source: "ai",
             update_time: "2023-11-23T06:00:00Z",
@@ -196,7 +196,7 @@ matrixEvent.matrices = {
         candidates: [
           {
             value: "318.1234567",
-            highlights: {},
+            highlight: {},
             source_remark: {
               source: "ai",
               update_time: "2023-11-23T06:00:00Z",
@@ -204,7 +204,7 @@ matrixEvent.matrices = {
           },
           {
             value: "318.1234567",
-            highlights: {},
+            highlight: {},
             source_remark: {
               source: "ai",
               update_time: "2023-11-23T06:00:00Z",
@@ -212,7 +212,7 @@ matrixEvent.matrices = {
           },
           {
             value: "318.1234567",
-            highlights: {},
+            highlight: {},
             source_remark: {
               source: "ai",
               update_time: "2023-11-23T06:00:00Z",
@@ -229,7 +229,7 @@ matrixEvent.matrices = {
         calculation_type: "gm_conversion_price_agreement_date",
         value: {
           value: "2023-11-21T08:22:00Z",
-          highlights: {},
+          highlight: {},
           source_remark: {
             source: "ai",
             update_time: "2023-11-23T06:00:00Z",
@@ -238,7 +238,7 @@ matrixEvent.matrices = {
         candidates: [
           {
             value: "318.1234567",
-            highlights: {},
+            highlight: {},
             source_remark: {
               source: "ai",
               update_time: "2023-11-23T06:00:00Z",
@@ -246,7 +246,7 @@ matrixEvent.matrices = {
           },
           {
             value: "318.1234567",
-            highlights: {},
+            highlight: {},
             source_remark: {
               source: "ai",
               update_time: "2023-11-23T06:00:00Z",
@@ -254,7 +254,7 @@ matrixEvent.matrices = {
           },
           {
             value: "318.1234567",
-            highlights: {},
+            highlight: {},
             source_remark: {
               source: "ai",
               update_time: "2023-11-23T06:00:00Z",
