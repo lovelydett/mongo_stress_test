@@ -5,10 +5,10 @@
 "use strict";
 
 const mongodb = require("mongodb");
+const config = require("./config.json");
 
-const mongoUrl =
-  "mongodb://internal.sentimac.org:27017/test_ai_vetting_tool?directConnection=true";
-const dbName = "test_ai_vetting_tool";
+const mongoUrl = config.mongo_url;
+const dbName = config.db_name;
 
 const moment = require("moment");
 
