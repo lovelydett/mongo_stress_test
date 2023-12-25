@@ -309,8 +309,8 @@ dataMocker.generateOneEditHistory = () => {
     user: crypto.randomUUID(),
     timestamp: moment().format("YYYY-MM-DDThh:mm:ssZ"),
     modified: crypto.randomUUID(),
-    before: crypto.randomBytes(100).toString("hex"),
-    after: crypto.randomBytes(100).toString("hex"),
+    before: crypto.randomBytes(500).toString("hex"),
+    after: crypto.randomBytes(500).toString("hex"),
   };
   for (let i = 0; i < numEdits; i++) {
     editHistory.edits.push(edit);

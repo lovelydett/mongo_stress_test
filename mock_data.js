@@ -5,7 +5,7 @@
 "use strict";
 
 const DB = require("./db");
-const dataMocker = require("./data_mocker");
+const dataMocker = require("./generate_data");
 
 /******* Begins the logic of this file *******/
 const initer = {};
@@ -176,8 +176,8 @@ inserter.mockMatrixEvents = async (numDocuments) => {
 inserter.mockEventValues = async (numDocuments) => {
   console.log(`inserting ${numDocuments} mocked event_values`);
   const db = await DB.getDBConnection();
-  const numMatrix = 45;
-  const numEvents = 2;
+  const numMatrix = 20; // this value may be too small for real data
+  const numEvents = 2; // this value may be too small for real data
   const batchSize = 100;
   for (let i = 0; i < numDocuments * numMatrix * numEvents; i += batchSize) {
     const eventValues = [];
