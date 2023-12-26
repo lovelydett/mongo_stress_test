@@ -52,8 +52,8 @@ async function main() {
     fout.write(
       "test_name, num_requests, num_threads, avg_latency, max_latency, min_latency\n"
     );
-    const numRequests = 3;
-    for (let i = 5; i <= 80; i += 5) {
+    const numRequests = 4;
+    for (let i = 2; i <= 80; i += 2) {
       const result = await queryHelper.execTest(
         "search_documents",
         numRequests,

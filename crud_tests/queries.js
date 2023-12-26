@@ -65,7 +65,10 @@ queryHelper.execTest = async (testName, numRequests, numThreads = 1) => {
     // sleep for 5 seconds
     await new Promise((resolve) => setTimeout(resolve, 5000));
   }
-  const averageDuration = totalDuration / (numRequests * numThreads);
+  // eliminate the max and the min
+  totalDuration -= maxDuration;
+  totalDuration -= minDuration;
+  const averageDuration = totalDuration / (numRequests * numThreads - 2);
   console.log(
     `the ${testName} executed ${numRequests} times ${numThreads} threads: avg latency: ${averageDuration} ms, max latency: ${maxDuration} ms, min latency: ${minDuration} ms`
   );
