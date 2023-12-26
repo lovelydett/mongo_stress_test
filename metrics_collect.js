@@ -30,9 +30,9 @@ const main = async () => {
   const db = await DB.getDBConnection();
   const stats = await db.stats();
   console.log(stats);
-  const dataSize = stats.dataSize;
+  const storageSize = stats.storageSize;
   const indexSize = stats.indexSize;
-  console.log(dataSize, indexSize);
+  console.log(storageSize, indexSize);
 };
 
 if (require.main == module) {

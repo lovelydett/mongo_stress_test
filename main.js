@@ -30,10 +30,10 @@ async function main() {
     fout.write(
       "num_documents, data_size, index_size, cache_size, working_set_size, total_memory_used, total_required_memory\n"
     );
-  
+
     await inserter.mockResponsibleTeam(3000);
     const deltaNumbers = 100;
-    const totalNumbers = 15000;
+    const totalNumbers = 10000;
     for (let inserted = 0; inserted <= totalNumbers; inserted += deltaNumbers) {
       await inserter.mockDocuments(deltaNumbers);
       await inserter.mockChecklists(deltaNumbers);
@@ -48,9 +48,24 @@ async function main() {
       console.log(`${inserted + deltaNumbers}, ${dataSize}, ${indexSize}`);
     }
   } else if (args["query"]) {
-    const result = await queryHelper.searchForDocuments();
+    const fout = fs.createWriteStream("result/query_result.csv");
+    fout.write(
+      "test_name, num_requests, num_threads, avg_latency, max_latency, min_latency\n"
+    );
+    const numRequests = 3;
+    for (let i = 5; i <= 80; i += 5) {
+      const result = await queryHelper.execTest(
+        "search_documents",
+        numRequests,
+        i
+      );
+      // sleep for 10 seconds
+      await new Promise((resolve) => setTimeout(resolve, 10000));
+      fout.write(
+        `search_documents, ${numRequests}, ${i}, ${result.avgLatency}, ${result.maxLatency}, ${result.minLatency}\n`
+      );
+    }
   }
-
 
   console.log("Done");
   process.exit(0);
