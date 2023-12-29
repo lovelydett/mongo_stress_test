@@ -319,6 +319,15 @@ dataMocker.generateOneEditHistory = () => {
   return editHistory;
 };
 
+dataMocker.mockRelationalCollections = () => {
+  const result = new Map();
+  // 1. generate one document
+  const document = dataMocker.generateOneDocument();
+  result.set("documents", document);
+
+  // use its
+};
+
 /******* Unit tests ********/
 
 function testGeneratingMatrixEvent() {
