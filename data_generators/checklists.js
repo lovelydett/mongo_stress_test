@@ -16,14 +16,6 @@ function generateOneChecklist(document_id) {
     Math.random() * (1577836800000 - 1514764800000) + 1514764800000
   ).format("YYYY-MM-DDTHH:mm:ssZ");
 
-  // a template highlight object
-  const highlight = {
-    is_cross_page: true,
-    page_range: [1, 5],
-    content: exampleHighlight.content,
-    blocks: exampleHighlight.blocks,
-  };
-
   checklist.rules = {};
   for (let ruleID of ruleIDs) {
     checklist.rules[ruleID] = {
@@ -36,7 +28,7 @@ function generateOneChecklist(document_id) {
         exclude: [2010603],
       },
       highlight_ids: [], // to be completed,
-      original_highlights: [], // to be completed
+      original_highlight_ids: [], // to be completed
     };
 
     // complete highlight ids
@@ -45,9 +37,10 @@ function generateOneChecklist(document_id) {
       checklist.rules[ruleID].highlight_ids.push(highlightID);
     }
 
-    // complete original highlights
+    // complete original highlight ids
     for (let i = 0; i < config.mock.checklists.numHighlightsPerRule; i++) {
-      checklist.rules[ruleID].original_highlights.push(highlight);
+      const highlightID = document_id + "_" + ruleID + "_" + (i + checklist.rules[ruleID].highlight_ids.length);
+      checklist.rules[ruleID].original_highlight_ids.push(highlightID);
     }
   }
 
@@ -60,6 +53,5 @@ module.exports = generateOneChecklist;
 
 if (require.main === module) {
   const mockedData = generateOneChecklist("document_id");
-  const j = JSON.stringify(mockedData, null, 2);
   console.log(mockedData);
 }

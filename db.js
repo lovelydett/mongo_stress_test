@@ -7,8 +7,8 @@
 const mongodb = require("mongodb");
 const config = require("./config.json");
 
-const mongoUrl = config.mongo_url;
-const dbName = config.db_name;
+const mongoUrl = config.mongo.url;
+const dbName = config.mongo.db;
 
 const moment = require("moment");
 
@@ -31,6 +31,15 @@ DB.createCollection = async (db, collectionName) => {
   console.log(`Creating collection ${collectionName}`);
   await db.createCollection(collectionName);
   console.log(`Created collection ${collectionName}`);
+};
+
+DB.insertOneDocument = async (db, collectionName, document) => {
+  console.log(
+    `${moment().toISOString()} Inserting one document into ${collectionName}`
+  );
+  const collection = db.collection(collectionName);
+  await collection.insert(document);
+  console.log(`Inserted one document into ${collectionName}`);
 };
 
 DB.insertDocuments = async (db, collectionName, documents) => {

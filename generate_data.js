@@ -18,7 +18,7 @@ exampleHighlight.blocks.forEach((block) => {
   }
 });
 const exampleMatrixEvent = require("./example_objects/example_matrix_events");
-const exampleEventValue = require("./example_objects/example_event_value");
+const exampleEventValue = require("./example_objects/example_calculation_value");
 
 /***** Begins the logic of this file *****/
 
@@ -324,6 +324,8 @@ dataMocker.mockRelationalCollections = () => {
   // 1. generate one document
   const document = dataMocker.generateOneDocument();
   result.set("documents", document);
+  // 2. checklist is related to document by document id and rule id
+  const checklist = dataMocker.generateOneChecklist();
 
   // use its
 };
