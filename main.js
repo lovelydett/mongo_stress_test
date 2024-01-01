@@ -9,6 +9,8 @@
 const { initer, inserter } = require("./mock_data");
 const queryHelper = require("./crud_tests/queries");
 const metricsCollector = require("./metrics_collect");
+const config = require("./config.json");
+const generator = require("./data_generators/generator");
 
 const cmdParser = require("command-line-parser");
 const fs = require("fs");
@@ -33,20 +35,15 @@ async function main() {
     );
 
     await inserter.mockResponsibleTeam(3000);
-    const deltaNumbers = 100;
-    const totalNumbers = 10000;
-    for (let inserted = 0; inserted <= totalNumbers; inserted += deltaNumbers) {
-      await inserter.mockDocuments(deltaNumbers);
-      await inserter.mockChecklists(deltaNumbers);
-      await inserter.mockMatrixEvents(deltaNumbers);
-      await inserter.mockEventValues(deltaNumbers);
-      await inserter.mockEditHistory(deltaNumbers);
-      await inserter.mockTaggingTypes(deltaNumbers);
-      // collect metrics
-      const dataSize = await metricsCollector.getTotalSize();
-      const indexSize = await metricsCollector.getIndexSize();
-      fout.write(`${inserted + deltaNumbers}, ${dataSize}, ${indexSize}, \n`);
-      console.log(`${inserted + deltaNumbers}, ${dataSize}, ${indexSize}`);
+    for (let i = 1; i <= config.mock.documents.numTotal; i++) {
+      await generator.generateOneDocumentAndRelatedData();
+      if (i % config.mock.documents.batchSize === 0) {
+        // collect metrics
+        const dataSize = await metricsCollector.getTotalSize();
+        const indexSize = await metricsCollector.getIndexSize();
+        fout.write(`${i}, ${dataSize}, ${indexSize}, \n`);
+        console.log(`${i}, ${dataSize}, ${indexSize}`);
+      }
     }
   } else if (args["query"]) {
     const fout = fs.createWriteStream("result/query_result.csv");

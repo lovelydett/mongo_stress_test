@@ -108,6 +108,8 @@ dataGenerator.generateOneDocumentAndRelatedData = async function () {
 
   // 9. insert highlight objects into db
   await generateHighlightsinBatch(highlights);
+
+  await Promise.all(promises);
 };
 
 /****** test ******/
