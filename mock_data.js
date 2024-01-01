@@ -118,6 +118,17 @@ initer.initTaggingTypes = async () => {
     .createIndex({ document_id: 1 }, { unique: true });
 };
 
+initer.initHighlights = async () => {
+  console.log("initializing highlights");
+  const db = await DB.getDBConnection();
+  await db.collection("highlights").drop();
+  await DB.createCollection(db, "highlights");
+
+  await db
+    .collection("highlights")
+    .createIndex({ highlight_id: 1 }, { unique: true });
+};
+
 // Generate and insert a given number of documents
 inserter.mockDocuments = async (numDocuments) => {
   console.log(`inserting ${numDocuments} mocked documents`);

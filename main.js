@@ -25,6 +25,7 @@ async function main() {
     await initer.initChecklists();
     await initer.initTaggingTypes();
     await initer.initEditHistory();
+    await initer.initHighlights();
   } else if (args["mock"]) {
     const fout = fs.createWriteStream("result/result.csv");
     fout.write(
