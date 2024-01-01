@@ -28,23 +28,6 @@ async function main() {
     await initer.initTaggingTypes();
     await initer.initEditHistory();
     await initer.initHighlights();
-  } else if (args["mock"]) {
-    const fout = fs.createWriteStream("result/result.csv");
-    fout.write(
-      "num_documents, data_size, index_size, cache_size, working_set_size, total_memory_used, total_required_memory\n"
-    );
-
-    await inserter.mockResponsibleTeam(3000);
-    for (let i = 1; i <= config.mock.documents.numTotal; i++) {
-      await generator.generateOneDocumentAndRelatedData();
-      if (i % config.mock.documents.batchSize === 0) {
-        // collect metrics
-        const dataSize = await metricsCollector.getTotalSize();
-        const indexSize = await metricsCollector.getIndexSize();
-        fout.write(`${i}, ${dataSize}, ${indexSize}, \n`);
-        console.log(`${i}, ${dataSize}, ${indexSize}`);
-      }
-    }
   } else if (args["query"]) {
     const fout = fs.createWriteStream("result/query_result.csv");
     fout.write(
@@ -62,6 +45,23 @@ async function main() {
       fout.write(
         `search_documents, ${numRequests}, ${i}, ${result.avgLatency}, ${result.maxLatency}, ${result.minLatency}\n`
       );
+    }
+  } else {
+    const fout = fs.createWriteStream("result/result.csv");
+    fout.write(
+      "num_documents, data_size, index_size, cache_size, working_set_size, total_memory_used, total_required_memory\n"
+    );
+
+    await inserter.mockResponsibleTeam(3000);
+    for (let i = 1; i <= config.mock.documents.numTotal; i++) {
+      await generator.generateOneDocumentAndRelatedData();
+      if (i % config.mock.documents.batchSize === 0) {
+        // collect metrics
+        const dataSize = await metricsCollector.getTotalSize();
+        const indexSize = await metricsCollector.getIndexSize();
+        fout.write(`${i}, ${dataSize}, ${indexSize}, \n`);
+        console.log(`${i}, ${dataSize}, ${indexSize}`);
+      }
     }
   }
 
