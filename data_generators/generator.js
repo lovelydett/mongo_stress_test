@@ -53,8 +53,8 @@ function collectHighlightIDsFromTaggingTypes(taggingTypes) {
   return highlightIDs;
 }
 
-async function generateHighlightsinBatch(highlightIDs) {
-  const batchSize = 20;
+async function generateHighlightsInBatch(highlightIDs) {
+  const batchSize = 200;
   const db = await DB.getDBConnection();
   while (highlightIDs.length > 0) {
     const highlights = [];
@@ -91,23 +91,23 @@ dataGenerator.generateOneDocumentAndRelatedData = async function () {
   promises.push(DB.insertDocuments(db, "tagging_types", [taggingTypes]));
 
   // 6. get highlights for checklist
-  const highlights = [];
+  const highlightIDs = [];
   const checklistHighlights = collectHighlightIDsFromChecklist(checklist);
-  highlights.push(...checklistHighlights);
+  highlightIDs.push(...checklistHighlights);
 
   // 7. get highlights for event values
   for (let eventValue of eventValues) {
     const eventValueHighlights = collectHighlightIDsFromEventValue(eventValue);
-    highlights.push(...eventValueHighlights);
+    highlightIDs.push(...eventValueHighlights);
   }
 
   // 8. get highlights for tagging types
   const taggingTypesHighlights =
     collectHighlightIDsFromTaggingTypes(taggingTypes);
-  highlights.push(...taggingTypesHighlights);
+  highlightIDs.push(...taggingTypesHighlights);
 
   // 9. insert highlight objects into db
-  await generateHighlightsinBatch(highlights);
+  await generateHighlightsInBatch(highlightIDs);
 
   await Promise.all(promises);
 };
