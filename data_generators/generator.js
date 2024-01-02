@@ -19,6 +19,7 @@ const generateOneMatrixEvent = require("./matrix_events.js");
 const generateEventValues = require("./event_values.js");
 const generateOneHighlight = require("./highlights.js");
 const generateOneTaggingTypes = require("./tagging_types.js");
+const generateOneEditHistory = require("./edit_history.js");
 
 function collectHighlightIDsFromChecklist(checklist) {
   const highlightIDs = [];
@@ -72,6 +73,7 @@ const documents = [];
 const checklists = [];
 const matrixEvents = [];
 const taggingTypes = [];
+const editHistories = [];
 dataGenerator.generateOneDocumentAndRelatedData = async function (
   hasRelatedData
 ) {
@@ -140,7 +142,16 @@ dataGenerator.generateOneDocumentAndRelatedData = async function (
   highlightIDs.push(...taggingTypesHighlights);
 
   // 9. insert highlight objects into db
-  await generateHighlightsInBatch(highlightIDs);
+  promises.push(generateHighlightsInBatch(highlightIDs));
+
+  // 10. generate edit history
+  const editHistory = generateOneEditHistory(document.document_id);
+  editHistories.push(editHistory);
+  if (editHistories.length >= batchSize) {
+    const editHistoriesCopy = JSON.parse(JSON.stringify(editHistories));
+    promises.push(DB.insertDocuments(db, "edit_history", editHistoriesCopy));
+    editHistories.length = 0;
+  }
 
   await Promise.all(promises);
 };

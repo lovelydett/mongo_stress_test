@@ -5,7 +5,6 @@ const crypto = require("crypto");
 function generateEventValues(matrixEvent) {
   const eventValues = [];
   const matrices = matrixEvent.matrices;
-  console.log(matrixEvent.event_ids);
   for (let matrixID in matrices) {
     for (let eventID of matrices[matrixID].event_ids) {
       const values = JSON.parse(
