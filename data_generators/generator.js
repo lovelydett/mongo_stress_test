@@ -68,7 +68,7 @@ async function generateHighlightsInBatch(highlightIDs) {
 }
 
 // batching documents of same collection
-const batchSize = 200;
+const batchSize = 50;
 const documents = [];
 const checklists = [];
 const matrixEvents = [];
