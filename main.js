@@ -53,7 +53,7 @@ async function main() {
     );
 
     await inserter.mockResponsibleTeam(3000);
-    const numVettable = 0;
+    let numVettable = 0;
     for (let i = 1; i <= config.mock.documents.numTotal; i++) {
       const hasRelatedData = Math.random() < Number(config.mock.documents.ratioVettable);
       if (hasRelatedData) {
