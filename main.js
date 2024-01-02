@@ -54,8 +54,9 @@ async function main() {
 
     await inserter.mockResponsibleTeam(3000);
     for (let i = 1; i <= config.mock.documents.numTotal; i++) {
-      await generator.generateOneDocumentAndRelatedData();
-      if (i % config.mock.documents.batchSize === 0) {
+      const hasRelatedData = Math.random() < config.mock.documents.ratioVettable;
+      await generator.generateOneDocumentAndRelatedData(hasRelatedData);
+      if (i % config.mock.documents.checkPointInterval === 0) {
         // collect metrics
         const dataSize = await metricsCollector.getTotalSize();
         const indexSize = await metricsCollector.getIndexSize();

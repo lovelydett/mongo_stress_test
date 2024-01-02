@@ -66,29 +66,58 @@ async function generateHighlightsInBatch(highlightIDs) {
   }
 }
 
-dataGenerator.generateOneDocumentAndRelatedData = async function () {
+// batching documents of same collection
+const batchSize = 200;
+const documents = [];
+const checklists = [];
+const matrixEvents = [];
+const taggingTypes = [];
+dataGenerator.generateOneDocumentAndRelatedData = async function (
+  hasRelatedData
+) {
   const db = await DB.getDBConnection();
   const promises = [];
 
   // 1. generate a document
   const document = generateOneDocument();
-  promises.push(DB.insertDocuments(db, "documents", [document]));
+  documents.push(document);
+  if (documents.length >= batchSize) {
+    promises.push(DB.insertDocuments(db, "documents", documents));
+    documents.length = 0;
+  }
+
+  if (!hasRelatedData) {
+    await Promise.all(promises);
+    return;
+  }
 
   // 2. generate the checklist of this document
   const checklist = generateOneChecklist(document.document_id);
-  promises.push(DB.insertDocuments(db, "checklists", [checklist]));
+  checklists.push(checklist);
+  if (checklists.length >= batchSize) {
+    promises.push(DB.insertDocuments(db, "checklists", checklists));
+    checklists.length = 0;
+  }
 
   // 3. generate the matrix event of this document
   const matrixEvent = generateOneMatrixEvent(document.document_id);
-  promises.push(DB.insertDocuments(db, "matrix_events", [matrixEvent]));
+  matrixEvents.push(matrixEvent);
+  if (matrixEvents.length >= batchSize) {
+    promises.push(DB.insertDocuments(db, "matrix_events", matrixEvents));
+    matrixEvents.length = 0;
+  }
 
   // 4. generate the event values of this matrix event
   const eventValues = generateEventValues(matrixEvent);
   promises.push(DB.insertDocuments(db, "event_values", eventValues));
 
   // 5. generate the tagging types of this document
-  const taggingTypes = generateOneTaggingTypes(document.document_id);
-  promises.push(DB.insertDocuments(db, "tagging_types", [taggingTypes]));
+  const taggingType = generateOneTaggingTypes(document.document_id);
+  taggingTypes.push(taggingType);
+  if (taggingTypes.length >= batchSize) {
+    promises.push(DB.insertDocuments(db, "tagging_types", taggingTypes));
+    taggingTypes.length = 0;
+  }
 
   // 6. get highlights for checklist
   const highlightIDs = [];
