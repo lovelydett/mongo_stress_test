@@ -82,7 +82,8 @@ dataGenerator.generateOneDocumentAndRelatedData = async function (
   const document = generateOneDocument();
   documents.push(document);
   if (documents.length >= batchSize) {
-    promises.push(DB.insertDocuments(db, "documents", documents));
+    const documentsCopy = JSON.parse(JSON.stringify(documents));
+    promises.push(DB.insertDocuments(db, "documents", documentsCopy));
     documents.length = 0;
   }
 
@@ -95,7 +96,8 @@ dataGenerator.generateOneDocumentAndRelatedData = async function (
   const checklist = generateOneChecklist(document.document_id);
   checklists.push(checklist);
   if (checklists.length >= batchSize) {
-    promises.push(DB.insertDocuments(db, "checklists", checklists));
+    const checklistsCopy = JSON.parse(JSON.stringify(checklists));
+    promises.push(DB.insertDocuments(db, "checklists", checklistsCopy));
     checklists.length = 0;
   }
 
@@ -103,7 +105,8 @@ dataGenerator.generateOneDocumentAndRelatedData = async function (
   const matrixEvent = generateOneMatrixEvent(document.document_id);
   matrixEvents.push(matrixEvent);
   if (matrixEvents.length >= batchSize) {
-    promises.push(DB.insertDocuments(db, "matrix_events", matrixEvents));
+    const matrixEventsCopy = JSON.parse(JSON.stringify(matrixEvents));
+    promises.push(DB.insertDocuments(db, "matrix_events", matrixEventsCopy));
     matrixEvents.length = 0;
   }
 
@@ -115,7 +118,8 @@ dataGenerator.generateOneDocumentAndRelatedData = async function (
   const taggingType = generateOneTaggingTypes(document.document_id);
   taggingTypes.push(taggingType);
   if (taggingTypes.length >= batchSize) {
-    promises.push(DB.insertDocuments(db, "tagging_types", taggingTypes));
+    const taggingTypesCopy = JSON.parse(JSON.stringify(taggingTypes));
+    promises.push(DB.insertDocuments(db, "tagging_types", taggingTypesCopy));
     taggingTypes.length = 0;
   }
 

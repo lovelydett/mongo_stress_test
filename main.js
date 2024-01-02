@@ -49,19 +49,23 @@ async function main() {
   } else {
     const fout = fs.createWriteStream("result/result.csv");
     fout.write(
-      "num_documents, data_size, index_size, cache_size, working_set_size, total_memory_used, total_required_memory\n"
+      "toal_documents, vettable_documents, data_size, index_size, cache_size, working_set_size, total_memory_used, total_required_memory\n"
     );
 
     await inserter.mockResponsibleTeam(3000);
+    const numVettable = 0;
     for (let i = 1; i <= config.mock.documents.numTotal; i++) {
-      const hasRelatedData = Math.random() < config.mock.documents.ratioVettable;
+      const hasRelatedData = Math.random() < Number(config.mock.documents.ratioVettable);
+      if (hasRelatedData) {
+        numVettable++;
+      }
       await generator.generateOneDocumentAndRelatedData(hasRelatedData);
       if (i % config.mock.documents.checkPointInterval === 0) {
         // collect metrics
         const dataSize = await metricsCollector.getTotalSize();
         const indexSize = await metricsCollector.getIndexSize();
-        fout.write(`${i}, ${dataSize}, ${indexSize}, \n`);
-        console.log(`${i}, ${dataSize}, ${indexSize}`);
+        fout.write(`${i}, ${numVettable}, ${dataSize}, ${indexSize}, \n`);
+        console.log(`${i}, ${numVettable}, ${dataSize}, ${indexSize}`);
       }
     }
   }
