@@ -13,7 +13,6 @@ const generateEventValues = require("../data_generators/event_values.js");
 const generateOneHighlight = require("../data_generators/highlights.js");
 const generateOneTaggingTypes = require("../data_generators/tagging_types.js");
 const generateOneEditHistory = require("../data_generators/edit_history.js");
-const { promises } = require("dns");
 
 let document = null;
 let checklist = null;
@@ -22,8 +21,6 @@ let eventValues = null;
 let highlights = null;
 let taggingTypes = null;
 let editHistory = null;
-
-let inited = false;
 
 function generateData() {
   document = generateOneDocument();
