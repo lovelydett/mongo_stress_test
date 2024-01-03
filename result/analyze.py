@@ -16,8 +16,9 @@ def analyzeMemoryUsage():
     data = data[1:]
 
     numDocuments = [int(d[0]) for d in data]
-    totalSize = [int(d[1]) * B_TO_GB for d in data]
-    indexSize = [int(d[2]) * B_TO_MB for d in data]
+    numVettable = [int(d[1]) for d in data]
+    totalSize = [int(d[2]) * B_TO_GB for d in data]
+    indexSize = [int(d[3]) * B_TO_MB for d in data]
 
     # plot two sub graphs for total size and index size
     # fig, axs = plt.subplots(2, 1, figsize=(15, 10))
@@ -65,5 +66,5 @@ def analyzeConcurrency():
 
 
 if __name__ == '__main__':
-    # analyzeMemoryUsage()
-    analyzeConcurrency()
+    analyzeMemoryUsage()
+    # analyzeConcurrency()

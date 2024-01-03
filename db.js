@@ -38,7 +38,7 @@ DB.insertOneDocument = async (db, collectionName, document) => {
     `${moment().toISOString()} Inserting one document into ${collectionName}`
   );
   const collection = db.collection(collectionName);
-  await collection.insert(document);
+  await collection.insertOne(document);
   console.log(`Inserted one document into ${collectionName}`);
 };
 

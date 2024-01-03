@@ -7,7 +7,7 @@
 "use strict";
 
 const { initer, inserter } = require("./mock_data");
-const queryHelper = require("./crud_tests/queries");
+const queryHelper = require("./crud/queries");
 const metricsCollector = require("./metrics_collect");
 const config = require("./config.json");
 const generator = require("./data_generators/generator");
