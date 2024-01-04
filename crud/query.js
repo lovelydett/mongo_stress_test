@@ -6,9 +6,7 @@
 
 const DB = require("../db");
 
-const queryTest = {};
-
-queryTest.searchForDocuments = async function () {
+module.exports = async function () {
   const db = DB.getDBConnection();
   const collection = db.collection("documents");
   const result = await collection.find({

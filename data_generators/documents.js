@@ -12,7 +12,7 @@ function generateOneDocument() {
   // 2. random available
   document.available = Math.random() < 0.5;
 
-  // 3. 30% vetting_enabled
+  // 3. (Deprecated, will be set outside) 30% vetting_enabled
   document.vetting_enabled = Math.random() < 0.3;
 
   // 4&5. 20% jura enabled

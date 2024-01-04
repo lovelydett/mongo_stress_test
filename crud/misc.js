@@ -5,37 +5,49 @@
 "use strict";
 
 const DB = require("../db");
-const db = DB.getDBConnection();
-const miscTest = {};
 
-miscTest.modifyChecklistScenario = async function () {
-  const randomDocument = db
-    .collection("documents")
-    .aggregate([{ $sample: { size: 1 } }]);
+module.exports = async function () {
+  const db = await DB.getDBConnection();
+  const documentsCollection = db.collection("documents");
+  const checklistCollection = db.collection("checklists");
+  const highlightsCollection = db.collection("highlights");
+  let res = await documentsCollection
+    .aggregate([{ $sample: { size: 1 } }])
+    .toArray();
+  const randomDocument = res[0];
 
   const documentID = randomDocument.document_id;
 
-  const document = db
-    .collection("documents")
-    .findOne({ document_id: documentID });
-  const checklist = db
-    .collection("documents")
-    .findOne({ document_id: documentID });
+  const document = await documentsCollection.findOne({
+    document_id: documentID,
+  });
+  if (!document) {
+    throw new Error(`document ${documentID} not found`);
+  }
+  const checklist = await checklistCollection.findOne({
+    document_id: documentID,
+  });
+  if (!checklist) {
+    throw new Error(`checklist ${documentID} not found`);
+  }
   const highlightIDs = [];
   // get all highlight IDs for each rule one-by-one, this is to simulate browsing and modifying each rule
   for (const ruleID in checklist.rules) {
     const rule = checklist.rules[ruleID];
     highlightIDs.push(...rule.highlight_ids);
     for (const highlightID of rule.highlight_ids) {
-      const highlight = await db.collection.findOne({
-        highlight_id: highlightID,
-      });
+      res = await documentsCollection
+        .findOne({
+          highlight_id: highlightID,
+        })
+        .toArray();
+      const highlight = res[0];
       // modify highlight
       highlight.highlight_id = highlight.highlight_id + crypto.randomUUID();
       highlightIDs.push(highlight.highlight_id);
       await DB.insertOneDocument(db, "highlights", highlight);
       // push the new highlight ID into checklist collection
-      await db.collection("checklist").updateOne(
+      await checklistCollection.updateOne(
         {
           document_id: documentID,
           [`rules.${ruleID}`]: {

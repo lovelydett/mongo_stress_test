@@ -90,9 +90,12 @@ dataGenerator.generateOneDocumentAndRelatedData = async function (
   }
 
   if (!hasRelatedData) {
+    document.vetting_enabled = false;
     await Promise.all(promises);
     return;
   }
+
+  document.vetting_enabled = true;
 
   // 2. generate the checklist of this document
   const checklist = generateOneChecklist(document.document_id);

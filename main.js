@@ -7,10 +7,10 @@
 "use strict";
 
 const { initer, inserter } = require("./mock_data");
-const queryHelper = require("./crud/queries");
 const metricsCollector = require("./metrics_collect");
 const config = require("./config.json");
 const generator = require("./data_generators/generator");
+const execCrudTest = require("./crud/executor");
 
 const cmdParser = require("command-line-parser");
 const fs = require("fs");
@@ -28,24 +28,13 @@ async function main() {
     await initer.initTaggingTypes();
     await initer.initEditHistory();
     await initer.initHighlights();
-  } else if (args["query"]) {
-    const fout = fs.createWriteStream("result/query_result.csv");
-    fout.write(
-      "test_name, num_requests, num_threads, avg_latency, max_latency, min_latency\n"
+  } else if (args["crud"]) {
+    console.log("Begin CRUD test");
+    await execCrudTest(
+      args["test"],
+      Number(args["threads"]),
+      Number(args["rounds"])
     );
-    const numRequests = 4;
-    for (let i = 2; i <= 80; i += 2) {
-      const result = await queryHelper.execTest(
-        "search_documents",
-        numRequests,
-        i
-      );
-      // sleep for 10 seconds
-      await new Promise((resolve) => setTimeout(resolve, 10000));
-      fout.write(
-        `search_documents, ${numRequests}, ${i}, ${result.avgLatency}, ${result.maxLatency}, ${result.minLatency}\n`
-      );
-    }
   } else {
     const fout = fs.createWriteStream("result/result.csv");
     fout.write(
@@ -55,7 +44,8 @@ async function main() {
     await inserter.mockResponsibleTeam(3000);
     let numVettable = 0;
     for (let i = 1; i <= config.mock.documents.numTotal; i++) {
-      const hasRelatedData = Math.random() < Number(config.mock.documents.ratioVettable);
+      const hasRelatedData =
+        Math.random() < Number(config.mock.documents.ratioVettable);
       if (hasRelatedData) {
         numVettable++;
       }

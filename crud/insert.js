@@ -18,7 +18,7 @@ let document = null;
 let checklist = null;
 let matrixEvent = null;
 let eventValues = null;
-let highlights = null;
+let highlights = [];
 let taggingTypes = null;
 let editHistory = null;
 
@@ -27,6 +27,7 @@ function generateData() {
   checklist = generateOneChecklist(document.document_id);
   matrixEvent = generateOneMatrixEvent(document.document_id);
   eventValues = generateEventValues(matrixEvent);
+  highlights = [];
   for (let i = 0; i < config.mock.checklists.numHighlightsPerRule; i++) {
     const highlight = generateOneHighlight(document.document_id);
     highlights.push(highlight);
@@ -35,15 +36,7 @@ function generateData() {
 }
 generateData();
 
-const insertTest = {};
-module.exports = insertTest;
-
-insertTest.insertOneEvent = async () => {
-  eventValues[0].document_id = crypto.randomUUID();
-  await DB.insertOneDocument(db, "event_values", eventValues[0]);
-};
-
-insertTest.insertOneDocumentAndRelated = async () => {
+module.exports = async () => {
   generateData();
   const promises = [];
   promises.push(DB.insertOneDocument(db, "documents", document));

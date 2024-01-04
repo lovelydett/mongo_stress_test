@@ -31,7 +31,12 @@ module.exports = async function (testName, numThreads, numRounds) {
   console.log(
     `executing ${testName} with ${numThreads} threads for ${numRounds} rounds`
   );
-  const resultFileName = `result/crud_test/${testName}_${numThreads}_${numRounds}.csv`;
+  const timeStr = moment().format("YYYY-MM-DD-HH-mm-ss");
+  const resultFileName = `result/crud_test/${testName}_${numThreads}_${numRounds}_${timeStr}.csv`;
+  // create the result dir
+  if (!fs.existsSync("result/crud_test")) {
+    fs.mkdirSync("result/crud_test");
+  }
   const fout = fs.createWriteStream(resultFileName);
   fout.write(
     "num_threads, num_requests, avg_latency, max_latency, min_latency\n"
@@ -39,19 +44,21 @@ module.exports = async function (testName, numThreads, numRounds) {
   let totalDuration = 0;
   let maxDuration = Number.MIN_SAFE_INTEGER;
   let minDuration = Number.MAX_SAFE_INTEGER;
-  for (let i = 0; i < numRounds; i++) {
-    const promises = [];
-    for (let j = 0; j < numThreads; j++) {
-      promises.push(
-        (async () => {
-          const duration = await execTestOnce(testName);
-          totalDuration += duration;
-          maxDuration = Math.max(maxDuration, duration);
-          minDuration = Math.min(minDuration, duration);
-        })()
-      );
+  for (let nThread = 2; nThread <= numThreads; nThread += 2) {
+    for (let i = 0; i < numRounds; i++) {
+      const promises = [];
+      for (let j = 0; j < nThread; j++) {
+        promises.push(
+          (async () => {
+            const duration = await execTestOnce(testName);
+            totalDuration += duration;
+            maxDuration = Math.max(maxDuration, duration);
+            minDuration = Math.min(minDuration, duration);
+          })()
+        );
+      }
+      await Promise.all(promises);
     }
-    await Promise.all(promises);
   }
   // eliminate the max and the min
   totalDuration -= maxDuration;
