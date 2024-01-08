@@ -5,9 +5,10 @@
 "use strict";
 
 const DB = require("../db");
+const crypto = require("crypto");
 
 module.exports = async function () {
-  const db = DB.getDBConnection();
+  const db = await DB.getDBConnection();
   const collection = db.collection("documents");
   const result = await collection.find({
     "headline_codes.latest.all": { $ne: "201" },
