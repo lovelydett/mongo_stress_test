@@ -42,9 +42,9 @@ module.exports = async function (testName, numThreads, numRounds) {
     "num_threads, num_requests, avg_latency, max_latency, min_latency\n"
   );
   let totalDuration = 0;
-  let maxDuration = Number.MIN_SAFE_INTEGER;
-  let minDuration = Number.MAX_SAFE_INTEGER;
   for (let nThread = 2; nThread <= numThreads; nThread += 2) {
+    let maxDuration = Number.MIN_SAFE_INTEGER;
+    let minDuration = Number.MAX_SAFE_INTEGER;
     for (let i = 0; i < numRounds; i++) {
       const promises = [];
       for (let j = 0; j < nThread; j++) {
@@ -59,16 +59,16 @@ module.exports = async function (testName, numThreads, numRounds) {
       }
       await Promise.all(promises);
     }
+    // eliminate the max and the min
+    totalDuration -= maxDuration;
+    totalDuration -= minDuration;
+    const averageDuration = totalDuration / (numRounds * nThread - 2);
+    console.log(
+      `the ${testName} executed ${numRounds} times ${numThreads} threads: avg latency: ${averageDuration} ms, max latency: ${maxDuration} ms, min latency: ${minDuration} ms`
+    );
+    fout.write(
+      `${numThreads}, ${numRounds}, ${averageDuration}, ${maxDuration}, ${minDuration}\n`
+    );
   }
-  // eliminate the max and the min
-  totalDuration -= maxDuration;
-  totalDuration -= minDuration;
-  const averageDuration = totalDuration / (numRounds * numThreads - 2);
-  console.log(
-    `the ${testName} executed ${numRounds} times ${numThreads} threads: avg latency: ${averageDuration} ms, max latency: ${maxDuration} ms, min latency: ${minDuration} ms`
-  );
-  fout.write(
-    `${numThreads}, ${numRounds}, ${averageDuration}, ${maxDuration}, ${minDuration}\n`
-  );
   fout.close();
 };
